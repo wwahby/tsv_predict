@@ -1,6 +1,7 @@
 import numpy as np
 import argparse
 
+
 def main():
 	parser = argparse.ArgumentParser()
 	parser.add_argument("Ng", type=float, help="Total number of logic gates in the design")
@@ -36,7 +37,6 @@ def main():
 	print( "{0:>14.3g}".format(conn_tot) )
 
 
-
 def get_total_tsvs_for_diff_num_tiers(Ng, k, p, max_tiers):
 	# Will return a vector of the number of TSVs needed for this design implemented
 	# with n=1:max_tiers tiers
@@ -56,12 +56,12 @@ def get_total_tsvs_for_diff_num_tiers(Ng, k, p, max_tiers):
 	return (conn_tot_vec, conn_per_layer_list, conn_to_list, conn_through_list)
 
 
-
 def calc_Tac(Ns, k, p, tier1_ind, tier2_ind):
 	bac = max(0,tier2_ind - tier1_ind -1) # bac = number of tiers BETWEEN tiers 1 and 2
 	Tac = 2*k*Ns**p * (bac + 1) - k*Ns**p * (bac + 2)**p - k*(bac*Ns)**p
 
 	return Tac
+
 
 def calc_connections_through_tier(Ns, k, p, tier_ind, num_tiers):
 	conn_through = 0
@@ -72,6 +72,7 @@ def calc_connections_through_tier(Ns, k, p, tier_ind, num_tiers):
 
 	return conn_through
 
+
 def calc_connections_through(Ns, k, p, num_tiers):
 	conn_through = np.zeros(num_tiers)
 	for tier in range(num_tiers):
@@ -79,11 +80,11 @@ def calc_connections_through(Ns, k, p, num_tiers):
 
 	return conn_through
 
+
 def calc_connections_to_tier(Ns, k, p, tier, num_tiers):
 	# Assumes F2B bonding style
 	#    Connections to tiers below do not require TSVs
 	#    Connections to tiers above require TSVs
-
 	conn_to = 0
 	for dest_tier in range(tier+1,num_tiers):
 		conn_to += calc_Tac(Ns, k, p, tier, dest_tier)
