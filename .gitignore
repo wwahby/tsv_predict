@@ -21,6 +21,9 @@ $RECYCLE.BIN/
 *~
 *.swp
 
+# Python
+*.pyc
+
 # =========================
 # Operating System Files
 # =========================
