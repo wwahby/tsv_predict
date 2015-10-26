@@ -14,7 +14,7 @@ def main():
 	p = args.p
 	tiers = args.tiers
 	( conn_tot, conn_per_layer, conn_to, conn_through ) = calc_tsv_requirements(Ng, k, p, tiers)
-	
+
 	fstr_header = "{0:>14s}  {1:>14s}  {2:>14s}  {3:>14s}"
 	fstr_data = "{0:>14.3g}  {1:>14.3f}  {2:>14.3f}  {3:>14d}"
 	header = fstr_header.format("Num Gates", "Rent k", "Rent p", "Num Tiers")
@@ -29,11 +29,31 @@ def main():
 	print(header)
 	for tier in range(tiers):
 		dstr = fstr_data.format(tier, conn_per_layer[tier], conn_to[tier], conn_through[tier])
-		print(dstr)	
+		print(dstr)
 
 	print()
 	print( "{0:>14s}".format("Total Vias") )
 	print( "{0:>14.3g}".format(conn_tot) )
+
+
+
+def get_total_tsvs_for_diff_num_tiers(Ng, k, p, max_tiers):
+	# Will return a vector of the number of TSVs needed for this design implemented
+	# with n=1:max_tiers tiers
+
+	conn_tot_vec = np.zeros((max_tiers))
+	conn_per_layer_list = []
+	conn_to_list = []
+	conn_through_list = []
+	for nind in range(max_tiers):
+		tiers = nind+1
+		( conn_tot, conn_per_layer, conn_to, conn_through ) = calc_tsv_requirements(Ng, k, p, tiers)
+		conn_tot_vec[nind] = conn_tot
+		conn_per_layer_list.append(conn_per_layer)
+		conn_to_list.append(conn_to)
+		conn_through_list.append(conn_through)
+
+	return (conn_tot_vec, conn_per_layer_list, conn_to_list, conn_through_list)
 
 
 
@@ -56,18 +76,18 @@ def calc_connections_through(Ns, k, p, num_tiers):
 	conn_through = np.zeros(num_tiers)
 	for tier in range(num_tiers):
 		conn_through[tier] = calc_connections_through_tier(Ns, k, p, tier, num_tiers)
-	
+
 	return conn_through
 
 def calc_connections_to_tier(Ns, k, p, tier, num_tiers):
 	# Assumes F2B bonding style
 	#    Connections to tiers below do not require TSVs
 	#    Connections to tiers above require TSVs
-	
+
 	conn_to = 0
 	for dest_tier in range(tier+1,num_tiers):
 		conn_to += calc_Tac(Ns, k, p, tier, dest_tier)
-	
+
 	return conn_to
 
 
@@ -75,7 +95,7 @@ def calc_connections_to(Ns, k, p, num_tiers):
 	conn_to = np.zeros(num_tiers)
 	for tier in range(num_tiers):
 		conn_to[tier] = calc_connections_to_tier(Ns, k, p, tier, num_tiers)
-	
+
 	return conn_to
 
 
