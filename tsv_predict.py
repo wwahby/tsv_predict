@@ -14,11 +14,17 @@ def main():
 	k = args.k
 	p = args.p
 	tiers = args.tiers
+	( conn_tot, conn_per_layer, conn_to, conn_through ) = report_tsv_requirements_single_config(Ng, k, p, tiers)
+
+
+def report_tsv_requirements_single_config(Ng, k, p, tiers):
 	( conn_tot, conn_per_layer, conn_to, conn_through ) = calc_tsv_requirements(Ng, k, p, tiers)
-	print_tsv_requirements(Ng, k, p, tiers, conn_tot, conn_per_layer, conn_to, conn_through)
+	print_tsv_requirements_detailed(Ng, k, p, tiers, conn_tot, conn_per_layer, conn_to, conn_through)
+
+	return ( conn_tot, conn_per_layer, conn_to, conn_through )
 
 
-def print_tsv_requirements(Ng, k, p, tiers, conn_tot, conn_per_layer, conn_to, conn_through):
+def print_tsv_requirements_detailed(Ng, k, p, tiers, conn_tot, conn_per_layer, conn_to, conn_through):
 	fstr_header = "{0:>14s}  {1:>14s}  {2:>14s}  {3:>14s}"
 	fstr_data = "{0:>14.3g}  {1:>14.3f}  {2:>14.3f}  {3:>14d}"
 	header = fstr_header.format("Num Gates", "Rent k", "Rent p", "Num Tiers")
