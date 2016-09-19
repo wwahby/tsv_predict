@@ -6,9 +6,9 @@ Ng = 1e6
 rent_k = 1.8
 
 max_tiers = 4
-pmin = 0.5
+pmin = 0.0
 pmax = 1
-Np = 1e2
+Np = 1e3
 pvec = np.linspace(pmin, pmax, num=Np)
 
 ntsv_mat = np.zeros( (max_tiers, int(Np)) )
@@ -29,8 +29,10 @@ for nind in range(max_tiers):
 	pl.plot(pvec, ntsv_mat[nind,:], color=colors[nind], linewidth=2)
 
 #pl.yscale('log')
-pl.xlim([pmin, pmax])
+#pl.xlim([pmin, pmax])
 
 pl.xlabel('Rent Exponent')
 pl.ylabel('Number of TSVs Required')
+pl.yscale('log')
+#pl.xscale('log')
 pl.savefig("rent_plot.png", transparent=True)
